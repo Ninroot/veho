@@ -65,28 +65,27 @@ public class Server implements Runnable {
 
 	}
 
-	private void getFile(ArrayList<File> fileList, ObjectInputStream in,
-			ObjectOutputStream out) {
+	private void getFile(ArrayList<File> fileList, ObjectInputStream in, ObjectOutputStream out) {
 		FileOutputStream fos = null;
 		BufferedOutputStream bos = null;
+		int buff = 1024; //why no more ?
 
 		for (File file : fileList) {
 			try {
-				 byte [] mybytearray = new byte [(int) file.length()]; //<-- mettre dans la boucle d'écriture
-				System.out.println("[SERVER] <-- download file :"
-						+ file.getName() + " size:" + file.length()
-						+ " with buffer:" + mybytearray.length);
+				byte [] mybytearray = new byte [buff];
+				System.out.println("[SERVER] <-- download file :" + file.getName() + " size:" + file.length() + " with buffer:" + mybytearray.length);
 				fos = new FileOutputStream(dstDirectory + file.getName());
 				bos = new BufferedOutputStream(fos);
 
 				int curPos = 0;
 				while (curPos < file.length()) {
-					int readThisTime = (int) Math.min(1024, file.length() - curPos);
-					in.read(mybytearray, curPos, readThisTime);
-					bos.write(mybytearray, curPos, readThisTime);
+					int readThisTime = (int) Math.min(buff, file.length() - curPos);
+					in.read(mybytearray, 0, readThisTime);
+					bos.write(mybytearray, 0, buff);
 					bos.flush();
 					
 					curPos += readThisTime;
+					//System.out.println("readThisTime:"+readThisTime+" curPos:"+curPos+ " file.length-curPos:"+(file.length() - curPos));
 				}
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
