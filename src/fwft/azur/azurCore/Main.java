@@ -22,7 +22,16 @@ public class Main {
 		
 		Thread tServer = new Thread(new Server());
 		tServer.start();
-		m.send(m, fileList);
+		
+//		for (int i = 0; i < 3; i++) {
+			m.send(m, fileList);
+//			try {
+//				Thread.sleep(1000);	//Long enough to finish the last one
+//			} catch (InterruptedException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//		}
 	}
 
 }

@@ -32,6 +32,7 @@ public class Client implements Runnable {
 			out.flush();
 			System.out.println("[CLIENT] Request sent: "+request);
 			
+			System.out.println("[CLIENT] zZzz Waiting for request... ");
 			Request requestBack = Request.listenForRequest(in, out);
 			System.out.println("[CLIENT] Request back received: "+requestBack);
 			

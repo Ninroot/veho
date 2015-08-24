@@ -24,44 +24,50 @@ public class Server implements Runnable {
 	}
 
 	public void run() {
-		try {
-			ServerSocket s = new ServerSocket(socketPort);
-			System.out.println("[SERVER] Socket : " + s);
+		boolean go = true;
+		while(go) {
+			try {
+				ServerSocket s = new ServerSocket(socketPort);
+				System.out.println("[SERVER] Socket : " + s);
 
-			Socket soc = s.accept();
-			System.out.println("[SERVER] Connection accepted: " + soc);
+				Socket soc = s.accept();
+				System.out.println("[SERVER] Connection accepted: " + soc);
 
-			ObjectOutputStream out = new ObjectOutputStream(soc.getOutputStream());
-			out.flush();
+				ObjectOutputStream out = new ObjectOutputStream(soc.getOutputStream());
+				out.flush();
 
-			ObjectInputStream in = new ObjectInputStream(soc.getInputStream());
+				ObjectInputStream in = new ObjectInputStream(soc.getInputStream());
 
-			Request request = Request.listenForRequest(in, out);
-			System.out.println("[SERVER] Request received: "+request);
-			
-			//Ask the user for request back
-			request.setAccepted(true);
-			out.writeObject(request);
-			out.flush();
-			
-			if(request.getAccepted()) {
-				System.out.println("[SERVER] Request back ACCEPTED and sent: "+request);
-				getFile(request.getFileList(), in, out);				
+				System.out.println("[SERVER] zZzz Waiting for request... ");
+				Request request = Request.listenForRequest(in, out);
+				System.out.println("[SERVER] Request received: "+request);
+
+				//Ask the user for request back
+				request.setAccepted(true);
+				out.writeObject(request);
+				out.flush();
+
+				if(request.getAccepted()) {
+					System.out.println("[SERVER] Request back ACCEPTED and sent: "+request);
+					
+					ServerSocket so = new ServerSocket(0);
+					System.out.println("listening on port: " + so.getLocalPort());
+					
+					getFile(request.getFileList(), in, out);				
+				}
+				else {
+					System.out.println("[SERVER] Request back DECLINED and sent: "+request);				
+				}				
+
+				in.close();
+				out.close();
+				soc.close();
+				s.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-			else {
-				System.out.println("[SERVER] Request back DECLINED and sent: "+request);				
-			}
-			
-
-			in.close();
-			out.close();
-			soc.close();
-			s.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
-
 	}
 
 	/**
