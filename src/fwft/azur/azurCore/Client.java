@@ -56,28 +56,28 @@ public class Client implements Runnable {
 		}
 	}
 
-	private void sendFile(ArrayList<File> fileList, ObjectInputStream in,
-			ObjectOutputStream out) {
+	private void sendFile(ArrayList<File> fileList, ObjectInputStream in, ObjectOutputStream out) {
 		FileInputStream fis = null;
 		BufferedInputStream bis = null;
+		int buff = 1024;
 
 		for (File file : fileList) {
 			try {
 				// byte [] mybytearray = new byte [(int)file.length()];
-				byte[] mybytearray = new byte[300000];
+				byte[] mybytearray = new byte[buff];
 				// byte [] mybytearray = Files.readAllBytes(file.toPath());
-				System.out.println("[CLIENT] --> upload :" + file.getName()
-						+ " size:" + file.length() + " with buffer:"
-						+ mybytearray.length);
+				System.out.println("[CLIENT] --> upload :"+file.getName()+" size:"+file.length()+" with buffer:"+ mybytearray.length);
 				fis = new FileInputStream(file);
 				bis = new BufferedInputStream(fis);
 
 				int curPos = 0;
 				while (curPos < file.length()) {
-					int readThisTime = (int) Math.min(1024, file.length()-curPos);
-					bis.read(mybytearray, curPos, readThisTime);
-					out.write(mybytearray, curPos, readThisTime);
+					int readThisTime = (int) Math.min(buff, file.length()-curPos);
+					bis.read(mybytearray, 0, readThisTime);
+					out.write(mybytearray, 0, readThisTime);
 					out.flush();
+					
+					System.out.println("[CLIENT] readThisTime:"+readThisTime+" curPos:"+curPos+ " file.length-curPos:"+(file.length() - curPos));
 
 					curPos += readThisTime;
 				}

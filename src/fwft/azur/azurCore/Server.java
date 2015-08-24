@@ -81,11 +81,11 @@ public class Server implements Runnable {
 				while (curPos < file.length()) {
 					int readThisTime = (int) Math.min(buff, file.length() - curPos);
 					in.read(mybytearray, 0, readThisTime);
-					bos.write(mybytearray, 0, buff);
+					bos.write(mybytearray, 0, readThisTime);
 					bos.flush();
 					
 					curPos += readThisTime;
-					//System.out.println("readThisTime:"+readThisTime+" curPos:"+curPos+ " file.length-curPos:"+(file.length() - curPos));
+					//System.out.println("[SERVER] readThisTime:"+readThisTime+" curPos:"+curPos+ " file.length-curPos:"+(file.length() - curPos));
 				}
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
