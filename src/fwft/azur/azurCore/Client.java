@@ -21,21 +21,28 @@ public class Client implements Runnable {
 	public void run() {
 		try {
 			Socket socket = new Socket(request.getMachineDst().getIpV3(), socketPort);
-			System.out.println("[CLIENT] Socket client: " + socket);
+			System.out.println("[CLIENT] Socket : " + socket);
 
-			ObjectOutputStream out = new ObjectOutputStream(
-					socket.getOutputStream());
+			ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
 			out.flush();
 
-			ObjectInputStream in = new ObjectInputStream(
-					socket.getInputStream());
-			System.out.println("[CLIENT] Client a cree les flux");
+			ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
 
 			out.writeObject(request);
 			out.flush();
-			System.out.println("[CLIENT] Donnees emises");
-
-			sendFile(request.getFileList(), in, out);
+			System.out.println("[CLIENT] Request sent: "+request);
+			
+			Request requestBack = Request.listenForRequest(in, out);
+			System.out.println("[CLIENT] Request back received: "+requestBack);
+			
+			if (requestBack.getAccepted()) {
+				System.out.println("[CLIENT] Request back ACCEPTED: "+requestBack);				
+				sendFile(request.getFileList(), in, out);				
+			}
+			else {
+				System.out.println("[CLIENT] Request back DECLINED: "+requestBack);
+			}
+			
 
 			in.close();
 			out.close();
@@ -48,7 +55,13 @@ public class Client implements Runnable {
 			e.printStackTrace();
 		}
 	}
-
+	
+	/**
+	 * Send files from fileList trough ObjectInputStream
+	 * @param fileList : list of file 
+	 * @param in : input of the socket
+	 * @param out : output of the socket 
+	 */
 	private void sendFile(ArrayList<File> fileList, ObjectInputStream in, ObjectOutputStream out) {
 		FileInputStream fis = null;
 		BufferedInputStream bis = null;

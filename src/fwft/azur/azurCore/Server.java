@@ -26,22 +26,32 @@ public class Server implements Runnable {
 	public void run() {
 		try {
 			ServerSocket s = new ServerSocket(socketPort);
-			System.out.println("[SERVER] Socket serveur: " + s);
+			System.out.println("[SERVER] Socket : " + s);
 
 			Socket soc = s.accept();
-			System.out.println("[SERVER] Connexion accepted: " + soc);
+			System.out.println("[SERVER] Connection accepted: " + soc);
 
 			ObjectOutputStream out = new ObjectOutputStream(soc.getOutputStream());
 			out.flush();
 
 			ObjectInputStream in = new ObjectInputStream(soc.getInputStream());
-			System.out.println("[SERVER] Creation du flux");
 
-			Object objetRecu = in.readObject();
-			Request request = (Request) objetRecu;
-
-			System.out.println("[SERVER] Recoit la request: " + request);
-			getFile(request.getFileList(), in, out);
+			Request request = Request.listenForRequest(in, out);
+			System.out.println("[SERVER] Request received: "+request);
+			
+			//Ask the user for request back
+			request.setAccepted(true);
+			out.writeObject(request);
+			out.flush();
+			
+			if(request.getAccepted()) {
+				System.out.println("[SERVER] Request back ACCEPTED and sent: "+request);
+				getFile(request.getFileList(), in, out);				
+			}
+			else {
+				System.out.println("[SERVER] Request back DECLINED and sent: "+request);				
+			}
+			
 
 			in.close();
 			out.close();
@@ -50,13 +60,16 @@ public class Server implements Runnable {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 
 	}
 
+	/**
+	 * Get files from fileList trough ObjectInputStream
+	 * @param fileList : list of file 
+	 * @param in : input of the socket
+	 * @param out : output of the socket 
+	 */
 	private void getFile(ArrayList<File> fileList, ObjectInputStream in, ObjectOutputStream out) {
 		FileOutputStream fos = null;
 		BufferedOutputStream bos = null;
@@ -75,7 +88,7 @@ public class Server implements Runnable {
 					in.read(mybytearray, 0, readThisTime);
 					bos.write(mybytearray, 0, readThisTime);
 					bos.flush();
-					
+
 					curPos += readThisTime;
 					//System.out.println("[SERVER] readThisTime:"+readThisTime+" curPos:"+curPos+ " file.length-curPos:"+(file.length() - curPos));
 				}
