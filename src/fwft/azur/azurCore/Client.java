@@ -20,8 +20,7 @@ public class Client implements Runnable {
 
 	public void run() {
 		try {
-			Socket socket = new Socket(request.getMachineDst().getIpV3(),
-					socketPort);
+			Socket socket = new Socket(request.getMachineDst().getIpV3(), socketPort);
 			System.out.println("[CLIENT] Socket client: " + socket);
 
 			ObjectOutputStream out = new ObjectOutputStream(
@@ -37,12 +36,6 @@ public class Client implements Runnable {
 			System.out.println("[CLIENT] Donnees emises");
 
 			sendFile(request.getFileList(), in, out);
-
-			// Object objetRecu = in.readObject();
-			// int[] tableauRecu = (int[]) objetRecu;
-			//
-			// System.out.println("Client recoit: " +
-			// Arrays.toString(tableauRecu));
 
 			in.close();
 			out.close();
@@ -62,13 +55,12 @@ public class Client implements Runnable {
 		int buff = 1024;
 
 		for (File file : fileList) {
-			try {
-				// byte [] mybytearray = new byte [(int)file.length()];
+			try {				
 				byte[] mybytearray = new byte[buff];
-				// byte [] mybytearray = Files.readAllBytes(file.toPath());
-				System.out.println("[CLIENT] --> upload :"+file.getName()+" size:"+file.length()+" with buffer:"+ mybytearray.length);
 				fis = new FileInputStream(file);
 				bis = new BufferedInputStream(fis);
+				
+				System.out.println("[CLIENT] ---> UPLOAD START :"+file.getName()+" size:"+file.length());
 
 				int curPos = 0;
 				while (curPos < file.length()) {
@@ -77,57 +69,15 @@ public class Client implements Runnable {
 					out.write(mybytearray, 0, readThisTime);
 					out.flush();
 					
-					System.out.println("[CLIENT] readThisTime:"+readThisTime+" curPos:"+curPos+ " file.length-curPos:"+(file.length() - curPos));
+					//System.out.println("[CLIENT] readThisTime:"+readThisTime+" curPos:"+curPos+ " file.length-curPos:"+(file.length() - curPos));
 
 					curPos += readThisTime;
 				}
-				System.out.println("[CLIENT] uploaded");
+				System.out.println("[CLIENT] -->| UPLOAD STOP :"+file.getName()+" size:"+file.length());
 
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
 	}
-
-	// public void send() {
-	// //ECHANGER SERVEUR ET CLIENT
-	// int FILE_SIZE = 20000; // file size temporary hard coded, should bigger
-	// than the file to be downloaded
-	//
-	// FileInputStream fis = null;
-	// BufferedInputStream bis = null;
-	// OutputStream os = null;
-	//
-	// Socket sock = null;
-	// try {
-	// sock = new Socket(machineDst.getIpV3(), socketPort);
-	// System.out.println("[SEND] Connecting...");
-	//
-	// byte [] mybytearray = new byte [(int)fileList.get(0).length()];
-	// System.out.println("Sending " + fileList.get(0).getName() + "(" +
-	// mybytearray.length + " bytes)");
-	// fis = new FileInputStream(fileList.get(0));
-	// bis = new BufferedInputStream(fis);
-	// bis.read(mybytearray,0,mybytearray.length);
-	// os = sock.getOutputStream();
-	// os.write(mybytearray,0,mybytearray.length);
-	// os.flush();
-	// System.out.println("Done.");
-	//
-	// } catch (IOException e) {
-	// // TODO Auto-generated catch block
-	// e.printStackTrace();
-	// }
-	// finally {
-	// try {
-	// if (bis != null) bis.close();
-	// if (os != null) os.close();
-	// if (sock != null) sock.close();
-	// } catch (IOException e) {
-	// // TODO Auto-generated catch block
-	// e.printStackTrace();
-	// }
-	// }
-	// }
-
 }

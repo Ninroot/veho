@@ -9,6 +9,8 @@ public class Main {
 		
 		Machine m = new Machine("MyLocal", "127.0.0.1");
 		ArrayList<File> fileList = new ArrayList<File>();
+		
+		//Files tests
 		fileList.add(new  File("/Users/debec/Desktop/src/txt.txt"));
 		fileList.add(new  File("/Users/debec/Desktop/src/txt2.txt"));
 		fileList.add(new  File("/Users/debec/Desktop/src/big.html"));

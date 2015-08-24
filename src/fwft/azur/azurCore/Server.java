@@ -31,19 +31,11 @@ public class Server implements Runnable {
 			Socket soc = s.accept();
 			System.out.println("[SERVER] Connexion accepted: " + soc);
 
-			ObjectOutputStream out = new ObjectOutputStream(
-					soc.getOutputStream());
+			ObjectOutputStream out = new ObjectOutputStream(soc.getOutputStream());
 			out.flush();
 
 			ObjectInputStream in = new ObjectInputStream(soc.getInputStream());
 			System.out.println("[SERVER] Creation du flux");
-
-			// int[] tableauAEmettre = {7, 8, 9};
-			//
-			// out.writeObject(tableauAEmettre);
-			// out.flush();
-			//
-			// System.out.println("Serveur: donnees emises");
 
 			Object objetRecu = in.readObject();
 			Request request = (Request) objetRecu;
@@ -73,7 +65,7 @@ public class Server implements Runnable {
 		for (File file : fileList) {
 			try {
 				byte [] mybytearray = new byte [buff];
-				System.out.println("[SERVER] <-- download file :" + file.getName() + " size:" + file.length() + " with buffer:" + mybytearray.length);
+				System.out.println("[SERVER] <--- DOWNLOAD START :" + file.getName() + " size:" + file.length());
 				fos = new FileOutputStream(dstDirectory + file.getName());
 				bos = new BufferedOutputStream(fos);
 
@@ -87,63 +79,11 @@ public class Server implements Runnable {
 					curPos += readThisTime;
 					//System.out.println("[SERVER] readThisTime:"+readThisTime+" curPos:"+curPos+ " file.length-curPos:"+(file.length() - curPos));
 				}
+				System.out.println("[SERVER] |<-- DOWNLOAD STOP :" + file.getName() + " size:" + file.length());
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 	}
-
-	// public void receive() {
-	// String FILE_TO_RECEIVED = dstDirectory;
-	// int bytesRead;
-	// int current = 0;
-	// FileOutputStream fos = null;
-	// BufferedOutputStream bos = null;
-	// ServerSocket servsock = null;
-	// Socket sock = null;
-	//
-	// try {
-	// servsock = new ServerSocket(socketPort);
-	//
-	// while (true) {
-	// System.out.println("[RECEIVE] Waiting...");
-	// sock = servsock.accept();
-	// System.out.println("[RECEIVE] Accepted connection : " + sock);
-	//
-	// // receive file
-	// byte [] mybytearray = new byte [200000];
-	// InputStream is = sock.getInputStream();
-	// fos = new FileOutputStream(FILE_TO_RECEIVED);
-	// bos = new BufferedOutputStream(fos);
-	// bytesRead = is.read(mybytearray,0,mybytearray.length);
-	// current = bytesRead;
-	//
-	// do {
-	// bytesRead =
-	// is.read(mybytearray, current, (mybytearray.length-current));
-	// if(bytesRead >= 0) current += bytesRead;
-	// } while(bytesRead > -1);
-	//
-	// bos.write(mybytearray, 0 , current);
-	// bos.flush();
-	// System.out.println("File " + FILE_TO_RECEIVED + " downloaded (" + current
-	// + " bytes read)");
-	//
-	// }
-	// } catch (IOException e) {
-	// e.printStackTrace();
-	// }
-	//
-	// finally {
-	// try {
-	// if (fos != null) fos.close();
-	// if (bos != null) bos.close();
-	// if (sock!=null) sock.close();
-	// if (servsock != null) servsock.close();
-	// } catch (IOException e) {
-	// e.printStackTrace(); }
-	// }
-	//
-	// }
 }
