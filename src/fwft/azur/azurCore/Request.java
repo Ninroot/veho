@@ -8,7 +8,7 @@ import java.io.Serializable;
 import java.net.ServerSocket;
 import java.util.ArrayList;
 
-public class Request implements Serializable{
+public class Request implements Serializable, Cloneable{
 	/**
 	 * 
 	 */
@@ -18,12 +18,24 @@ public class Request implements Serializable{
 	private ArrayList<File> fileList;
 	private Boolean accepted;
 	private int port;
+	private boolean portBool;
 	
 	public Request(Machine machineSrc, Machine machineDst, ArrayList<File> fileList) {
 		this.machineDst = machineDst;
 		this.machineSrc = machineSrc;
 		this.fileList = fileList;
 		this.accepted = false;
+		//this.port = 30;
+		this.setPortBool(false);
+	}
+	
+	public Request(Request request) {
+		this.machineDst = request.machineDst;
+		this.machineSrc = request.machineSrc;
+		this.fileList = request.fileList;
+		this.accepted = request.accepted;
+		this.port = request.port;
+		this.portBool = request.portBool;
 	}
 	
 	protected static Request listenForRequest(ObjectInputStream in, ObjectOutputStream out) {
@@ -31,10 +43,11 @@ public class Request implements Serializable{
 
 		while(go) {
 			try {
+				System.out.println("Waiting for request...");
 				Object objetRecu = in.readObject();
 				Request request = (Request) objetRecu;
 				if(request != null) {
-					//System.out.println("Request received: " + request);
+					System.out.println("Request received: " + request);
 					return request;					
 				}
 
@@ -64,6 +77,15 @@ public class Request implements Serializable{
 	    }
 
 	    throw new IOException("No free port found");
+	}
+	
+	public String toString() {
+		return	//"src: "+machineSrc+
+				//" dst: "+machineDst+
+				//" files: "+fileList+
+				" accepted: "+accepted+
+				" port: "+port+
+				" portBool: "+portBool;
 	}
 
 	public Machine getMachineDst() {
@@ -96,6 +118,22 @@ public class Request implements Serializable{
 
 	public void setAccepted(Boolean accepted) {
 		this.accepted = accepted;
+	}
+
+	public int getPort() {
+		return port;
+	}
+
+	public void setPort(int port) {
+		this.port = port;
+	}
+
+	public boolean isPortBool() {
+		return portBool;
+	}
+
+	public void setPortBool(boolean portBool) {
+		this.portBool = portBool;
 	}
 
 }

@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -20,34 +21,55 @@ public class Client implements Runnable {
 
 	public void run() {
 		try {
-			Socket socket = new Socket(request.getMachineDst().getIpV3(), socketPort);
-			System.out.println("[CLIENT] Socket : " + socket);
+			Socket socketRequest = new Socket(request.getMachineDst().getIpV3(), socketPort);
+			System.out.println("[CLIENT] Socket : " + socketRequest);
 
-			ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+			ObjectOutputStream out = new ObjectOutputStream(socketRequest.getOutputStream());
 			out.flush();
 
-			ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+			ObjectInputStream in = new ObjectInputStream(socketRequest.getInputStream());
 
 			out.writeObject(request);
 			out.flush();
 			System.out.println("[CLIENT] Request sent: "+request);
 			
 			System.out.println("[CLIENT] zZzz Waiting for request... ");
-			Request requestBack = Request.listenForRequest(in, out);
-			System.out.println("[CLIENT] Request back received: "+requestBack);
-			
-			if (requestBack.getAccepted()) {
-				System.out.println("[CLIENT] Request back ACCEPTED: "+requestBack);				
+			request = Request.listenForRequest(in, out);
+			System.out.println("[CLIENT] Request back received: "+request);
+			if (request.getAccepted()) {
+				System.out.println("[CLIENT] Request back ACCEPTED: "+request);
+				
+				int port=0;
+				do {
+					try {
+						request = Request.listenForRequest(in, out);
+						port = request.getPort();
+						
+						System.out.println("[CLIENT] Trying port n°: " + port);
+						Socket socketFile = new Socket(request.getMachineDst().getIpV3(), port);
+						System.out.println("[CLIENT] WORKS with port n°: " + port);
+						
+						request.setPortBool(true);
+						out.writeObject(request);
+						out.flush();
+			        } catch (IOException ex) {
+			        	System.out.println("[CLIENT] DOES NOT WORK port n°: " + port);
+			        	out.writeObject(request);
+						out.flush();
+			            continue;
+			        }
+				} while(!request.isPortBool());
+				
 				sendFile(request.getFileList(), in, out);				
 			}
 			else {
-				System.out.println("[CLIENT] Request back DECLINED: "+requestBack);
+				System.out.println("[CLIENT] Request back DECLINED: "+request);
 			}
 			
 
 			in.close();
 			out.close();
-			socket.close();
+			socketRequest.close();
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

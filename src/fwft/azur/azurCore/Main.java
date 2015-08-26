@@ -1,11 +1,20 @@
 package fwft.azur.azurCore;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.ServerSocket;
 import java.util.ArrayList;
 
 public class Main {
 
 	public static void main(String[] args) {
+		
+		try {
+			ServerSocket socketTest = new ServerSocket(65535);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		Machine m = new Machine("MyLocal", "127.0.0.1");
 		ArrayList<File> fileList = new ArrayList<File>();

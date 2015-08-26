@@ -27,16 +27,16 @@ public class Server implements Runnable {
 		boolean go = true;
 		while(go) {
 			try {
-				ServerSocket s = new ServerSocket(socketPort);
-				System.out.println("[SERVER] Socket : " + s);
+				ServerSocket serverSocketRequest = new ServerSocket(socketPort);
+				System.out.println("[SERVER] Socket : " + serverSocketRequest);
 
-				Socket soc = s.accept();
-				System.out.println("[SERVER] Connection accepted: " + soc);
+				Socket socketRequest = serverSocketRequest.accept();
+				System.out.println("[SERVER] Connection accepted: " + socketRequest);
 
-				ObjectOutputStream out = new ObjectOutputStream(soc.getOutputStream());
+				ObjectOutputStream out = new ObjectOutputStream(socketRequest.getOutputStream());
 				out.flush();
 
-				ObjectInputStream in = new ObjectInputStream(soc.getInputStream());
+				ObjectInputStream in = new ObjectInputStream(socketRequest.getInputStream());
 
 				System.out.println("[SERVER] zZzz Waiting for request... ");
 				Request request = Request.listenForRequest(in, out);
@@ -46,13 +46,35 @@ public class Server implements Runnable {
 				request.setAccepted(true);
 				out.writeObject(request);
 				out.flush();
+				System.out.println("[SERVER] Request back ACCEPTED and sent: "+request);
 
 				if(request.getAccepted()) {
-					System.out.println("[SERVER] Request back ACCEPTED and sent: "+request);
-					
-					ServerSocket so = new ServerSocket(0);
-					System.out.println("listening on port: " + so.getLocalPort());
-					
+					//Find a good port for files transfer
+					int port=65535;
+					do {
+						do {
+							try {
+								System.out.println("[SERVER] Trying port n°: " + port);
+								ServerSocket socketFile = new ServerSocket(port);
+								System.out.println("[SERVER] WORKS with port n°: " + port);
+								
+								request.setPort(port);
+								Request requestCopy = new Request(request);
+								out.writeObject(requestCopy);
+								out.flush();
+								
+								request = requestCopy;
+								request = Request.listenForRequest(in, out);
+								break;
+							} catch (IOException ex) {
+								port--;
+								continue;
+							}
+						}while(port>0);
+						System.out.println();
+					} while(!request.isPortBool());
+
+					System.out.println("[SERVER] Port OK!!!!!!!!!: ");
 					getFile(request.getFileList(), in, out);				
 				}
 				else {
@@ -61,12 +83,14 @@ public class Server implements Runnable {
 
 				in.close();
 				out.close();
-				soc.close();
-				s.close();
+				socketRequest.close();
+				serverSocketRequest.close();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+
+			go = false;	//TESTING ONLY
 		}
 	}
 

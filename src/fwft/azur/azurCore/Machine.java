@@ -88,7 +88,10 @@ public class Machine implements Serializable{
             return "0.0.0.0";
 	}
 	
-
+	public String toString() {
+		return "name: "+name+" ip:"+ipV3+" password:"+password;
+	}
+	
 	public String getName() {
 		return name;
 	}
