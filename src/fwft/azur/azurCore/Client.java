@@ -6,11 +6,15 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 
+/**
+ * 
+ * @author abyx
+ *
+ */
 public class Client implements Runnable {
 	private int socketPort = 13267;
 	private Request request;
@@ -36,17 +40,20 @@ public class Client implements Runnable {
 			System.out.println("[CLIENT] zZzz Waiting for request... ");
 			request = Request.listenForRequest(in, out);
 			System.out.println("[CLIENT] Request back received: "+request);
+			
 			if (request.getAccepted()) {
 				System.out.println("[CLIENT] Request back ACCEPTED: "+request);
 				
+				//Find a good port for files transfer
 				int port=0;
+				Socket socketFile = null;
 				do {
 					try {
 						request = Request.listenForRequest(in, out);
 						port = request.getPort();
 						
 						System.out.println("[CLIENT] Trying port n°: " + port);
-						Socket socketFile = new Socket(request.getMachineDst().getIpV3(), port);
+						socketFile = new Socket(request.getMachineDst().getIpV3(), port);
 						System.out.println("[CLIENT] WORKS with port n°: " + port);
 						
 						request.setPortBool(true);
@@ -60,7 +67,17 @@ public class Client implements Runnable {
 			        }
 				} while(!request.isPortBool());
 				
-				sendFile(request.getFileList(), in, out);				
+				System.out.println("[CLIENT] START upload file(s)");
+				ObjectOutputStream outFile = new ObjectOutputStream(socketFile.getOutputStream());
+				outFile.flush();
+				
+				ObjectInputStream inFile = new ObjectInputStream(socketFile.getInputStream());
+				sendFile(request.getFileList(), inFile, outFile);
+				System.out.println("[CLIENT] STOP upload file(s)");
+				
+				inFile.close();
+				outFile.close();
+				socketFile.close();
 			}
 			else {
 				System.out.println("[CLIENT] Request back DECLINED: "+request);

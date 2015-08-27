@@ -10,6 +10,11 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
+/**
+ * 
+ * @author abyx
+ *
+ */
 public class Server implements Runnable {
 	private int socketPort;
 	private String dstDirectory;
@@ -51,15 +56,16 @@ public class Server implements Runnable {
 				if(request.getAccepted()) {
 					//Find a good port for files transfer
 					int port=65535;
+					ServerSocket serverSocketFile = null;
 					do {
 						do {
 							try {
 								System.out.println("[SERVER] Trying port n°: " + port);
-								ServerSocket socketFile = new ServerSocket(port);
+								serverSocketFile = new ServerSocket(port);
 								System.out.println("[SERVER] WORKS with port n°: " + port);
 								
 								request.setPort(port);
-								Request requestCopy = new Request(request);
+								Request requestCopy = new Request(request);	//Why is the copy necessary ?
 								out.writeObject(requestCopy);
 								out.flush();
 								
@@ -71,11 +77,22 @@ public class Server implements Runnable {
 								continue;
 							}
 						}while(port>0);
-						System.out.println();
 					} while(!request.isPortBool());
 
-					System.out.println("[SERVER] Port OK!!!!!!!!!: ");
-					getFile(request.getFileList(), in, out);				
+					System.out.println("[SERVER] START download file(s)");
+					Socket socketFile = serverSocketFile.accept();
+					
+					ObjectOutputStream outFile = new ObjectOutputStream(socketFile.getOutputStream());
+					out.flush();
+
+					ObjectInputStream inFile = new ObjectInputStream(socketFile.getInputStream());
+					
+					getFile(request.getFileList(), inFile, outFile);
+					System.out.println("[SERVER] STOP upload file(s)");
+					
+					inFile.close();
+					outFile.close();
+					socketFile.close();
 				}
 				else {
 					System.out.println("[SERVER] Request back DECLINED and sent: "+request);				

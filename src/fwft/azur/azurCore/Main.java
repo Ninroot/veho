@@ -17,6 +17,7 @@ public class Main {
 		}
 		
 		Machine m = new Machine("MyLocal", "127.0.0.1");
+		Machine m2 = Machine.getMyMachine();
 		ArrayList<File> fileList = new ArrayList<File>();
 		
 		//Files tests
@@ -34,6 +35,7 @@ public class Main {
 		
 //		for (int i = 0; i < 3; i++) {
 			m.send(m, fileList);
+			m2.send(m, fileList);
 //			try {
 //				Thread.sleep(1000);	//Long enough to finish the last one
 //			} catch (InterruptedException e) {
