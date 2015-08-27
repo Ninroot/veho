@@ -9,7 +9,6 @@ import java.net.Socket;
 public class ServerRequestPort implements Runnable{
 	private int socketPort = 13267;
 	private RequestPort requestPort;
-	//private String dstDirectory = "/Users/debec/Desktop/dst/";
 
 	public ServerRequestPort() {
 		this.requestPort = null;
@@ -69,6 +68,8 @@ public class ServerRequestPort implements Runnable{
 			}
 
 			System.out.println("SERVER SOCKET FILE : "+serverSocketFile.getLocalPort());
+			Thread tServer = new Thread(new Server(serverSocketFile));
+			tServer.start();
 		}
 
 	}

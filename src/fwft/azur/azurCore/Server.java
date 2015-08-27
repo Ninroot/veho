@@ -16,99 +16,149 @@ import java.util.ArrayList;
  *
  */
 public class Server implements Runnable {
-	private int socketPort;
+	private ServerSocket serverSocketFile;
 	private String dstDirectory;
 
-	public Server() {
-		this.socketPort = 13267;
+	public Server(ServerSocket serverSocketFile) {
+		this.serverSocketFile = serverSocketFile;
 		this.dstDirectory = "/Users/debec/Desktop/dst/";
 	}
 
-	public Server(int socketPort) {
-		this.socketPort = socketPort;
-	}
-
-	public void run() {
-		boolean go = true;
-		while(go) {
-			try {
-				ServerSocket serverSocketRequest = new ServerSocket(socketPort);
-				System.out.println("[SERVER] Socket : " + serverSocketRequest);
-
-				Socket socketRequest = serverSocketRequest.accept();
-				System.out.println("[SERVER] Connection accepted: " + socketRequest);
-
-				ObjectOutputStream out = new ObjectOutputStream(socketRequest.getOutputStream());
-				out.flush();
-
-				ObjectInputStream in = new ObjectInputStream(socketRequest.getInputStream());
-
-				System.out.println("[SERVER] zZzz Waiting for request... ");
-				Request request = Request.listenForRequest(in, out);
-				System.out.println("[SERVER] Request received: "+request);
-
-				//Ask the user for request back
-				request.setAccepted(true);
-				out.writeObject(request);
-				out.flush();
-				System.out.println("[SERVER] Request back ACCEPTED and sent: "+request);
-
-				if(request.getAccepted()) {
-					//Find a good port for files transfer
-					int port=65535;
-					ServerSocket serverSocketFile = null;
-					do {
-						do {
-							try {
-								System.out.println("[SERVER] Trying port n°: " + port);
-								serverSocketFile = new ServerSocket(port);
-								System.out.println("[SERVER] WORKS with port n°: " + port);
-								
-								request.setPort(port);
-								Request requestCopy = new Request(request);	//Why is the copy necessary ?
-								out.writeObject(requestCopy);
-								out.flush();
-								
-								request = requestCopy;
-								request = Request.listenForRequest(in, out);
-								break;
-							} catch (IOException ex) {
-								port--;
-								continue;
-							}
-						}while(port>0);
-					} while(!request.isPortBool());
-
-					System.out.println("[SERVER] START download file(s)");
-					Socket socketFile = serverSocketFile.accept();
-					
-					ObjectOutputStream outFile = new ObjectOutputStream(socketFile.getOutputStream());
-					out.flush();
-
-					ObjectInputStream inFile = new ObjectInputStream(socketFile.getInputStream());
-					
-					getFile(request.getFileList(), inFile, outFile);
-					System.out.println("[SERVER] STOP upload file(s)");
-					
-					inFile.close();
-					outFile.close();
-					socketFile.close();
-				}
-				else {
-					System.out.println("[SERVER] Request back DECLINED and sent: "+request);				
-				}				
-
-				in.close();
-				out.close();
-				socketRequest.close();
-				serverSocketRequest.close();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-			go = false;	//TESTING ONLY
+	public void run() {		
+		Socket socketFile = null;
+		ObjectOutputStream out = null;
+		ObjectInputStream in = null;
+		
+		try {
+			socketFile = serverSocketFile.accept();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
+		
+		try {
+			out = new ObjectOutputStream(socketFile.getOutputStream());
+			out.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		try {
+			in = new ObjectInputStream(socketFile.getInputStream());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		RequestFile requestFile = RequestFile.listenForRequest(in, out);
+		//Ask user
+		requestFile.setAccepted(true);
+		
+		try {
+			out.writeObject(requestFile);
+			out.flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		if (requestFile.getAccepted()) {
+			getFile(requestFile.getFileList(), in, out);
+		}
+		
+		try {
+			in.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		try {
+			out.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		try {
+			socketFile.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+//		boolean go = true;
+//		while(go) {
+//			try {
+//				ServerSocket serverSocketRequest = new ServerSocket(socketPort);
+//				System.out.println("[SERVER] Socket : " + serverSocketRequest);
+//
+//				Socket socketRequest = serverSocketRequest.accept();
+//				System.out.println("[SERVER] Connection accepted: " + socketRequest);
+//
+//				ObjectOutputStream out = new ObjectOutputStream(socketRequest.getOutputStream());
+//				out.flush();
+//
+//				ObjectInputStream in = new ObjectInputStream(socketRequest.getInputStream());
+//
+//				System.out.println("[SERVER] zZzz Waiting for request... ");
+//				RequestFile request = RequestFile.listenForRequest(in, out);
+//				System.out.println("[SERVER] Request received: "+request);
+//
+//				//Ask the user for request back
+//				request.setAccepted(true);
+//				out.writeObject(request);
+//				out.flush();
+//				System.out.println("[SERVER] Request back ACCEPTED and sent: "+request);
+//
+//				if(request.getAccepted()) {
+//					//Find a good port for files transfer
+//					int port=65535;
+//					ServerSocket serverSocketFile = null;
+//					do {
+//						do {
+//							try {
+//								System.out.println("[SERVER] Trying port n°: " + port);
+//								serverSocketFile = new ServerSocket(port);
+//								System.out.println("[SERVER] WORKS with port n°: " + port);
+//								
+//								request.setPort(port);
+//								RequestFile requestCopy = new RequestFile(request);	//Why is the copy necessary ?
+//								out.writeObject(requestCopy);
+//								out.flush();
+//								
+//								request = requestCopy;
+//								request = RequestFile.listenForRequest(in, out);
+//								break;
+//							} catch (IOException ex) {
+//								port--;
+//								continue;
+//							}
+//						}while(port>0);
+//					} while(!request.isPortBool());
+//
+//					System.out.println("[SERVER] START download file(s)");
+//					Socket socketFile = serverSocketFile.accept();
+//					
+//					ObjectOutputStream outFile = new ObjectOutputStream(socketFile.getOutputStream());
+//					out.flush();
+//
+//					ObjectInputStream inFile = new ObjectInputStream(socketFile.getInputStream());
+//					
+//					getFile(request.getFileList(), inFile, outFile);
+//					System.out.println("[SERVER] STOP upload file(s)");
+//					
+//					inFile.close();
+//					outFile.close();
+//					socketFile.close();
+//				}
+//				else {
+//					System.out.println("[SERVER] Request back DECLINED and sent: "+request);				
+//				}				
+//
+//				in.close();
+//				out.close();
+//				socketRequest.close();
+//				serverSocketRequest.close();
+//			} catch (IOException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//
+//			go = false;	//TESTING ONLY
+//		}
 	}
 
 	/**
@@ -125,7 +175,7 @@ public class Server implements Runnable {
 		for (File file : fileList) {
 			try {
 				byte [] mybytearray = new byte [buff];
-				System.out.println("[SERVER] <--- DOWNLOAD START :" + file.getName() + " size:" + file.length());
+				//System.out.println("[SERVER] <--- DOWNLOAD START :" + file.getName() + " size:" + file.length());
 				fos = new FileOutputStream(dstDirectory + file.getName());
 				bos = new BufferedOutputStream(fos);
 

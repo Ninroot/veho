@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 /**
@@ -16,84 +15,130 @@ import java.util.ArrayList;
  *
  */
 public class Client implements Runnable {
-	private int socketPort = 13267;
-	private Request request;
+	private RequestFile requestFile;
+	private Socket socketFile;
 
-	public Client(Request request) {
-		this.request = request;
+	public Client(RequestFile requestFile, Socket socketFile) {
+		this.requestFile = requestFile;
+		this.socketFile = socketFile;
 	}
 
 	public void run() {
+		ObjectOutputStream out = null;
+		ObjectInputStream in = null;
+		
 		try {
-			Socket socketRequest = new Socket(request.getMachineDst().getIpV3(), socketPort);
-			System.out.println("[CLIENT] Socket : " + socketRequest);
-
-			ObjectOutputStream out = new ObjectOutputStream(socketRequest.getOutputStream());
+			out = new ObjectOutputStream(socketFile.getOutputStream());
 			out.flush();
-
-			ObjectInputStream in = new ObjectInputStream(socketRequest.getInputStream());
-
-			out.writeObject(request);
-			out.flush();
-			System.out.println("[CLIENT] Request sent: "+request);
-			
-			System.out.println("[CLIENT] zZzz Waiting for request... ");
-			request = Request.listenForRequest(in, out);
-			System.out.println("[CLIENT] Request back received: "+request);
-			
-			if (request.getAccepted()) {
-				System.out.println("[CLIENT] Request back ACCEPTED: "+request);
-				
-				//Find a good port for files transfer
-				int port=0;
-				Socket socketFile = null;
-				do {
-					try {
-						request = Request.listenForRequest(in, out);
-						port = request.getPort();
-						
-						System.out.println("[CLIENT] Trying port n°: " + port);
-						socketFile = new Socket(request.getMachineDst().getIpV3(), port);
-						System.out.println("[CLIENT] WORKS with port n°: " + port);
-						
-						request.setPortBool(true);
-						out.writeObject(request);
-						out.flush();
-			        } catch (IOException ex) {
-			        	System.out.println("[CLIENT] DOES NOT WORK port n°: " + port);
-			        	out.writeObject(request);
-						out.flush();
-			            continue;
-			        }
-				} while(!request.isPortBool());
-				
-				System.out.println("[CLIENT] START upload file(s)");
-				ObjectOutputStream outFile = new ObjectOutputStream(socketFile.getOutputStream());
-				outFile.flush();
-				
-				ObjectInputStream inFile = new ObjectInputStream(socketFile.getInputStream());
-				sendFile(request.getFileList(), inFile, outFile);
-				System.out.println("[CLIENT] STOP upload file(s)");
-				
-				inFile.close();
-				outFile.close();
-				socketFile.close();
-			}
-			else {
-				System.out.println("[CLIENT] Request back DECLINED: "+request);
-			}
-			
-
-			in.close();
-			out.close();
-			socketRequest.close();
-		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
+		} catch (IOException e) {
 			e.printStackTrace();
+		}
+		
+		try {
+			in = new ObjectInputStream(socketFile.getInputStream());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		try {
+			out.writeObject(requestFile);
+			out.flush();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		requestFile = RequestFile.listenForRequest(in, out);
+		if(requestFile.getAccepted()) {
+			sendFile(requestFile.getFileList(), in, out);
+		}
+		
+		try {
+			in.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		try {
+			out.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		try {
+			socketFile.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+//		
+//		try {
+//			Socket socketRequest = new Socket(request.getMachineDst().getIpV3(), socketPort);
+//			System.out.println("[CLIENT] Socket : " + socketRequest);
+//
+//			ObjectOutputStream out = new ObjectOutputStream(socketRequest.getOutputStream());
+//			out.flush();
+//
+//			ObjectInputStream in = new ObjectInputStream(socketRequest.getInputStream());
+//
+//			out.writeObject(request);
+//			out.flush();
+//			System.out.println("[CLIENT] Request sent: "+request);
+//			
+//			System.out.println("[CLIENT] zZzz Waiting for request... ");
+//			request = RequestFile.listenForRequest(in, out);
+//			System.out.println("[CLIENT] Request back received: "+request);
+//			
+//			if (request.getAccepted()) {
+//				System.out.println("[CLIENT] Request back ACCEPTED: "+request);
+//				
+//				//Find a good port for files transfer
+//				int port=0;
+//				Socket socketFile = null;
+//				do {
+//					try {
+//						request = RequestFile.listenForRequest(in, out);
+//						port = request.getPort();
+//						
+//						System.out.println("[CLIENT] Trying port n°: " + port);
+//						socketFile = new Socket(request.getMachineDst().getIpV3(), port);
+//						System.out.println("[CLIENT] WORKS with port n°: " + port);
+//						
+//						request.setPortBool(true);
+//						out.writeObject(request);
+//						out.flush();
+//			        } catch (IOException ex) {
+//			        	System.out.println("[CLIENT] DOES NOT WORK port n°: " + port);
+//			        	out.writeObject(request);
+//						out.flush();
+//			            continue;
+//			        }
+//				} while(!request.isPortBool());
+//				
+//				System.out.println("[CLIENT] START upload file(s)");
+//				ObjectOutputStream outFile = new ObjectOutputStream(socketFile.getOutputStream());
+//				outFile.flush();
+//				
+//				ObjectInputStream inFile = new ObjectInputStream(socketFile.getInputStream());
+//				sendFile(request.getFileList(), inFile, outFile);
+//				System.out.println("[CLIENT] STOP upload file(s)");
+//				
+//				inFile.close();
+//				outFile.close();
+//				socketFile.close();
+//			}
+//			else {
+//				System.out.println("[CLIENT] Request back DECLINED: "+request);
+//			}
+//			
+//
+//			in.close();
+//			out.close();
+//			socketRequest.close();
+//		} catch (UnknownHostException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 	}
 	
 	/**
@@ -113,7 +158,7 @@ public class Client implements Runnable {
 				fis = new FileInputStream(file);
 				bis = new BufferedInputStream(fis);
 				
-				System.out.println("[CLIENT] ---> UPLOAD START :"+file.getName()+" size:"+file.length());
+				//System.out.println("[CLIENT] ---> UPLOAD START :"+file.getName()+" size:"+file.length());
 
 				int curPos = 0;
 				while (curPos < file.length()) {
@@ -126,7 +171,7 @@ public class Client implements Runnable {
 
 					curPos += readThisTime;
 				}
-				System.out.println("[CLIENT] -->| UPLOAD STOP :"+file.getName()+" size:"+file.length());
+				//System.out.println("[CLIENT] -->| UPLOAD STOP :"+file.getName()+" size:"+file.length());
 
 			} catch (IOException e) {
 				e.printStackTrace();

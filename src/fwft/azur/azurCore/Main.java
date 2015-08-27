@@ -1,23 +1,22 @@
 package fwft.azur.azurCore;
 
 import java.io.File;
-import java.io.IOException;
-import java.net.ServerSocket;
 import java.util.ArrayList;
 
 public class Main {
 
 	public static void main(String[] args) {
+		test1();
+	}
+	
+	public static void test1() {
+//		try {
+//			ServerSocket socketTest = new ServerSocket(65535);
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
 		
-		try {
-			ServerSocket socketTest = new ServerSocket(65535);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		Machine m = new Machine("MyLocal", "127.0.0.1");
-		Machine m2 = Machine.getMyMachine();
+		Machine m = Machine.getMyMachine();
 		ArrayList<File> fileList = new ArrayList<File>();
 		
 		//Files tests
@@ -30,19 +29,11 @@ public class Main {
 		//fileList.add(new  File("/Users/debec/Desktop/src/file.png"));
 		//fileList.add(new  File("/Users/debec/Desktop/src/nouille.png"));
 		
-		Thread tServer = new Thread(new Server());
+		Thread tServer = new Thread(new ServerRequestPort());
 		tServer.start();
 		
-//		for (int i = 0; i < 3; i++) {
+		for (int i=0; i<5; i++)
 			m.send(m, fileList);
-			m2.send(m, fileList);
-//			try {
-//				Thread.sleep(1000);	//Long enough to finish the last one
-//			} catch (InterruptedException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//		}
+		
 	}
-
 }

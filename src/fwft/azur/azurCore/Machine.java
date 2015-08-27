@@ -26,10 +26,13 @@ public class Machine implements Serializable{
 	 * send file 
 	 */
 	public void send(Machine machineDst, ArrayList<File> fileList) {
-		Request request = new Request(Machine.getMyMachine(), machineDst, fileList);
-		Client client = new Client(request);
-		Thread tClient = new Thread(client);
-		tClient.start();
+		RequestPort requestPort = new RequestPort(Machine.getMyMachine(), machineDst);
+		RequestFile requestFile = new RequestFile(fileList);
+		
+		ClientRequestPort clientRequestPort = new ClientRequestPort(requestPort, requestFile);
+		
+		Thread tclientRequestPort = new Thread(clientRequestPort);
+		tclientRequestPort.start();
 	}
 	
 	/**

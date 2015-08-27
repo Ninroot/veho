@@ -8,9 +8,11 @@ import java.net.Socket;
 public class ClientRequestPort implements Runnable{
 	private int socketPort = 13267;
 	private RequestPort requestPort;
+	private RequestFile requestFile;
 
-	public ClientRequestPort(RequestPort requestPort) {
-		this.setRequestPort(requestPort);
+	public ClientRequestPort(RequestPort requestPort, RequestFile requestFile) {
+		this.requestPort = requestPort;
+		this.requestFile = requestFile;
 	}
 
 	@Override
@@ -57,6 +59,8 @@ public class ClientRequestPort implements Runnable{
 		}
 
 		System.out.println("SOCKET FILE : "+socketFile.getPort());
+		Thread tClient = new Thread(new Client(requestFile, socketFile));
+		tClient.start();
 	}
 
 	public Socket getSocketFile(ObjectInputStream in, ObjectOutputStream out) {
