@@ -56,7 +56,7 @@ public class ClientRequestPort implements Runnable{
 			e.printStackTrace();
 		}
 
-		System.out.println("SOCKET FILE :"+socketFile);
+		System.out.println("SOCKET FILE : "+socketFile.getPort());
 	}
 
 	public Socket getSocketFile(ObjectInputStream in, ObjectOutputStream out) {

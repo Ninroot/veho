@@ -7,14 +7,25 @@ public class Main2 {
 		Machine m2 = new Machine("m2", "127.0.0.1");
 		
 		RequestPort rp = new RequestPort(m1, m2);
-		ClientRequestPort crp = new ClientRequestPort(rp);
-		ServerRequestPort srp = new ServerRequestPort();
 
-		Thread tCrp = new Thread(crp);
-		Thread tSrp = new Thread(srp);
+		Thread tSrp = new Thread(new ServerRequestPort());
+
+		Thread tCrp = new Thread(new ClientRequestPort(rp));
+		Thread tCrp2 = new Thread(new ClientRequestPort(rp));
+		
+		tSrp.start();
 		
 		tCrp.start();
-		tSrp.start();
+		
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		tCrp2.start();
+		
 	}
 
 }
