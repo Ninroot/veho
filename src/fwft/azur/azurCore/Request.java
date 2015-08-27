@@ -8,7 +8,7 @@ import java.io.Serializable;
 import java.net.ServerSocket;
 import java.util.ArrayList;
 
-public class Request implements Serializable, Cloneable{
+public class Request implements Serializable{
 	/**
 	 * 
 	 */
