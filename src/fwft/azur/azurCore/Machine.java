@@ -2,6 +2,8 @@ package fwft.azur.azurCore;
 
 import java.io.File;
 import java.io.Serializable;
+import java.net.Inet4Address;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Vector;
 import java.util.regex.Matcher;
@@ -57,6 +59,18 @@ public class Machine implements Serializable{
 	 */
 	public static Machine getMyMachine() {
 		return new Machine("MyLocal", "192.168.1.97");
+	}
+	
+	public static Machine getMyLocalMachine() {
+		String nameIp = null;
+		
+		try {
+			nameIp = Inet4Address.getLocalHost().toString();
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
+		
+		return new Machine(Machine.getNameRegex(nameIp), Machine.getIpRegex(nameIp));
 	}
 	
 	/**

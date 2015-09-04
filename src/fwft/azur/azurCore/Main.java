@@ -2,11 +2,22 @@ package fwft.azur.azurCore;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-public class Main {
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+
+public class Main extends Application {
 
 	public static void main(String[] args) {
-		test1();
+		//ARP broadcast pour choper les ips
+		//Application.launch(Main.class, (java.lang.String[])null);
+		launch(args);
+		//test1();
 	}
 	
 	public static void test1() {
@@ -17,9 +28,11 @@ public class Main {
 //		}
 		
 		Machine m = Machine.getMyMachine();
-		ArrayList<File> fileList = new ArrayList<File>();
+		System.out.println(m.getIpV3());
+		System.out.println(m.getName());
 		
 		//Files tests
+		ArrayList<File> fileList = new ArrayList<File>();
 		fileList.add(new  File("/Users/debec/Desktop/src/txt.txt"));
 		fileList.add(new  File("/Users/debec/Desktop/src/big.html"));
 		fileList.add(new  File("/Users/debec/Desktop/src/fire.png"));
@@ -31,9 +44,22 @@ public class Main {
 		
 		Thread tServer = new Thread(new ServerRequestPort());
 		tServer.start();
-		
 		for (int i=0; i<5; i++)
 			m.send(m, fileList);
+		
+	}
+
+	@Override
+	public void start(Stage primaryStage) throws Exception {
+		try {
+			Parent page = FXMLLoader.load(Main.class.getResource("menu.fxml"));
+            Scene scene = new Scene(page);
+            primaryStage.setScene(scene);
+            primaryStage.setTitle("FXML is Simple");
+            primaryStage.show();
+        } catch (Exception ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
 		
 	}
 }
