@@ -1,9 +1,8 @@
 package azur.veho;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -12,12 +11,32 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class Main extends Application {
+	
+	private Stage primaryStage;
+	
+	@Override
+	public void start(Stage primaryStage) {
+		this.primaryStage = primaryStage;
+		this.primaryStage.setTitle("veho");
+		
+		initRootLayout();
+	}
+	
+	public void initRootLayout() {
+		try {
+			Parent rootLayout = FXMLLoader.load(Main.class.getResource("view/RootLayout.fxml"));
+			Scene scene = new Scene(rootLayout);
+			
+			primaryStage.setScene(scene);
+			primaryStage.show();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
 	public static void main(String[] args) {
 		//ARP broadcast pour choper les ips
-		//Application.launch(Main.class, (java.lang.String[])null);
 		launch(args);
-		//test1();
 	}
 	
 	public static void test1() {
@@ -46,20 +65,6 @@ public class Main extends Application {
 		tServer.start();
 		for (int i=0; i<5; i++)
 			m.send(m, fileList);
-		
-	}
-
-	@Override
-	public void start(Stage primaryStage) throws Exception {
-		try {
-			Parent page = FXMLLoader.load(Main.class.getResource("menu.fxml"));
-            Scene scene = new Scene(page);
-            primaryStage.setScene(scene);
-            primaryStage.setTitle("FXML is Simple");
-            primaryStage.show();
-        } catch (Exception ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-        }
 		
 	}
 }
