@@ -1,4 +1,4 @@
-package fwft.azur.azurCore;
+package azur.veho;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

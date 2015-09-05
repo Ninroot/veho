@@ -1,4 +1,4 @@
-package fwft.azur.azurCore;
+package azur.veho;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
