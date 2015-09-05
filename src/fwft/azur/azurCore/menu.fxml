@@ -5,12 +5,12 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane fx:controller="azurCore.MenuController" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="106.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="106.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fwft.azur.azurCore.MenuController">
    <children>
       <HBox layoutX="24.0" layoutY="33.0" spacing="10.0">
          <children>
             <ChoiceBox fx:id="chooseMachineChoiceBox" layoutX="14.0" layoutY="35.0" prefWidth="150.0" />
-            <Button fx:id="refreshMachineButton" layoutX="171.0" layoutY="35.0" mnemonicParsing="false" text="Refresh" />
+            <Button fx:id="refreshMachineButton" layoutX="171.0" layoutY="35.0" mnemonicParsing="false" onAction="#changeText" text="Refresh" />
             <Button fx:id="openFilesButton" layoutX="257.0" layoutY="35.0" mnemonicParsing="false" text="Open..." />
             <Button fx:id="sendFilesButton" layoutX="331.0" layoutY="35.0" mnemonicParsing="false" text="Send" />
          </children>

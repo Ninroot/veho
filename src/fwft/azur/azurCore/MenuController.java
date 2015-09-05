@@ -13,22 +13,33 @@ import javafx.scene.control.Button;
 
 public class MenuController implements Initializable {
 
+	@Override
+	public void initialize(URL arg0, ResourceBundle arg1) {
+		// TODO Auto-generated method stub
+		
+	}
+	
     @FXML //  fx:id="refreshMachineButton"
     private Button refreshMachineButton; // Value injected by FXMLLoader
 
-
-    @Override // This method is called by the FXMLLoader when initialization is complete
-    public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
-        assert refreshMachineButton != null : "fx:id=\"refreshMachineButton\" was not injected: check your FXML file 'simple.fxml'.";
-
-        // initialize your logic here: all @FXML variables will have been injected
-        refreshMachineButton.setOnAction(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent event) {
-                System.out.println("That was easy, wasn't it?");
-            }
-        });
-
+    public void changeText(ActionEvent event) {
+    	System.out.println("Nouille");
     }
+    
+
+
+//    @Override // This method is called by the FXMLLoader when initialization is complete
+//    public void initialize(URL fxmlFileLocation, ResourceBundle resources) {
+//        assert refreshMachineButton != null : "fx:id=\"refreshMachineButton\" was not injected: check your FXML file 'simple.fxml'.";
+//
+//        // initialize your logic here: all @FXML variables will have been injected
+//        refreshMachineButton.setOnAction(new EventHandler<ActionEvent>() {
+//
+//            @Override
+//            public void handle(ActionEvent event) {
+//                System.out.println("That was easy, wasn't it?");
+//            }
+//        });
+//
+//    }
 }
