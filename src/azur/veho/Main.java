@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.rmi.server.LoaderHandler;
 import java.util.ArrayList;
 
+import azur.veho.view.TransferOverviewController;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -28,12 +29,11 @@ public class Main extends Application {
 		
 		initRootLayout();
 		
-		//showPersonOverview
-		//MenuController controller = new FXMLLoader
+		showTransferOverview();
 	}
 	
 	public Main() {
-		machineList.addAll(Machine.getMachineFromARP());
+		//machineList.addAll(Machine.getMachineFromARP());
 	}
 	
 	public void initRootLayout() {
@@ -57,6 +57,10 @@ public class Main extends Application {
             AnchorPane personOverview = (AnchorPane) loader.load();
 
             rootLayout.setCenter(personOverview);
+            
+            TransferOverviewController controller = loader.getController();
+            controller.setMain(this);
+            
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -66,7 +70,7 @@ public class Main extends Application {
 		launch(args);
 	}
 	
-//	public static void test1() {
+//	public static void test() {
 ////		try {
 ////			ServerSocket socketTest = new ServerSocket(65535);
 ////		} catch (IOException e) {

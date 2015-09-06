@@ -5,7 +5,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="100.0" maxWidth="400.0" minHeight="64.0" minWidth="373.0" prefHeight="64.0" prefWidth="376.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="azur.veho.Main">
+<AnchorPane maxHeight="100.0" maxWidth="400.0" minHeight="64.0" minWidth="373.0" prefHeight="64.0" prefWidth="376.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="azur.veho.view.TransferOverviewController">
    <children>
       <HBox layoutX="10.0" layoutY="6.0" spacing="10.0">
          <children>
@@ -19,7 +19,7 @@
          </opaqueInsets>
       </HBox>
       <HBox layoutX="27.0" layoutY="67.0" />
-      <Label fx:id="transferLabel" layoutX="113.0" layoutY="40.0" prefHeight="16.0" prefWidth="150.0" textAlignment="CENTER" />
       <ProgressBar layoutX="11.0" layoutY="38.0" prefHeight="20.0" prefWidth="355.0" progress="0.0" />
+      <Label fx:id="transferLabel" layoutX="113.0" layoutY="40.0" prefHeight="16.0" prefWidth="150.0" text="Nouille" />
    </children>
 </AnchorPane>
