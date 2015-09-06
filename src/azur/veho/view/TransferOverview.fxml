@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="100.0" maxWidth="400.0" minHeight="64.0" minWidth="373.0" prefHeight="64.0" prefWidth="376.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="azur.veho.Main">
+   <children>
+      <HBox layoutX="10.0" layoutY="6.0" spacing="10.0">
+         <children>
+            <ChoiceBox fx:id="chooseMachine" layoutX="14.0" layoutY="35.0" prefWidth="150.0" />
+            <Button fx:id="refreshMachine" layoutX="171.0" layoutY="35.0" mnemonicParsing="false" text="Refresh" />
+            <Button fx:id="openFiles" layoutX="257.0" layoutY="35.0" mnemonicParsing="false" text="Open..." />
+            <Button fx:id="sendFiles" layoutX="331.0" layoutY="35.0" mnemonicParsing="false" text="Send" />
+         </children>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+      </HBox>
+      <HBox layoutX="27.0" layoutY="67.0" />
+      <Label fx:id="transferLabel" layoutX="113.0" layoutY="40.0" prefHeight="16.0" prefWidth="150.0" textAlignment="CENTER" />
+      <ProgressBar layoutX="11.0" layoutY="38.0" prefHeight="20.0" prefWidth="355.0" progress="0.0" />
+   </children>
+</AnchorPane>

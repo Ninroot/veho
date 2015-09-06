@@ -5,6 +5,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
+import javafx.beans.property.SimpleStringProperty;
+
 public class ClientRequestPort implements Runnable{
 	private int socketPort = 13267;
 	private RequestPort requestPort;
@@ -22,7 +24,7 @@ public class ClientRequestPort implements Runnable{
 		ObjectInputStream in = null;
 
 		try {
-			socketRequestPort = new Socket(requestPort.getMachineDst().getIpV3(), socketPort);
+			socketRequestPort = new Socket(requestPort.getMachineDst().getIpV3().toString(), socketPort);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -77,7 +79,7 @@ public class ClientRequestPort implements Runnable{
 		do {
 			try {
 				requestPort = RequestPort.listenForRequestPort(in, out);
-				socketFile = new Socket(requestPort.getMachineDst().getIpV3(),requestPort.getPort());
+				socketFile = new Socket(requestPort.getMachineDst().getIpV3().toString(), requestPort.getPort());
 				requestPort.setAccepted(true);
 
 			} catch (IOException e) {
