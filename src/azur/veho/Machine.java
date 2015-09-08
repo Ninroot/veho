@@ -21,9 +21,9 @@ public class Machine implements Serializable{
 	private SimpleStringProperty ipV3;
 	private SimpleStringProperty password;
 	
-	public Machine(SimpleStringProperty name, SimpleStringProperty ipV3) {
-		this.name = name;
-		this.ipV3 = ipV3;
+	public Machine(String name, String ipV3) {
+		this.name = new SimpleStringProperty(name);
+		this.ipV3 = new SimpleStringProperty(ipV3);
 		this.password = new SimpleStringProperty("azur");
 	}
 	
@@ -62,7 +62,7 @@ public class Machine implements Serializable{
 	 * @return
 	 */
 	public static Machine getMyMachine() {
-		return new Machine(new SimpleStringProperty("MyLocal"), new SimpleStringProperty("192.168.1.97"));
+		return new Machine("MyLocal", "192.168.1.97");
 	}
 	
 	public static Machine getMyLocalMachine() {
@@ -82,15 +82,15 @@ public class Machine implements Serializable{
 	 * @param line
 	 * @return
 	 */
-	private static SimpleStringProperty getNameRegex(String line) {
+	private static String getNameRegex(String line) {
 		String namePattern = "^[a-z]+.[a-z]+"; //http://stackoverflow.com/questions/15875013/extract-ip-addresses-from-strings-using-regex
 		Pattern pattern = Pattern.compile(namePattern);
 		Matcher matcher = pattern.matcher(line);
 		
         if (matcher.find())
-            return new SimpleStringProperty(matcher.group(0));
+            return matcher.group(0);
         else
-            return new SimpleStringProperty("Unknown");
+            return "Unknown";
 	}
 	
 	/**
@@ -98,19 +98,19 @@ public class Machine implements Serializable{
 	 * @param line
 	 * @return
 	 */
-	private static SimpleStringProperty getIpRegex(String line) {
+	private static String getIpRegex(String line) {
 		String ipPattern = "(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)"; //http://stackoverflow.com/questions/15875013/extract-ip-addresses-from-strings-using-regex
 		Pattern pattern = Pattern.compile(ipPattern);
 		Matcher matcher = pattern.matcher(line);
 		
         if (matcher.find())
-            return new SimpleStringProperty(matcher.group(0));
+            return matcher.group(0);
         else
-            return new SimpleStringProperty("0.0.0.0");
+            return "0.0.0.0";
 	}
 	
 	public String toString() {
-		return "name: "+name+" ip:"+ipV3+" password:"+password;
+		return name.toString()+" ("+ipV3.toString()+")";
 	}
 	
 	public SimpleStringProperty getName() {
