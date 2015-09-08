@@ -39,30 +39,22 @@ public class TransferOverviewController implements Initializable {
     public void initialize(URL arg0, ResourceBundle arg1) {
     	
     	showFileTransfer(null);
+    	openFiles.setDisable(true);
+    	sendFiles.setDisable(true);
     	showMachineList();
-//    	chooseMachine.getSelectionModel().selectedItemProperty().addListener(
-//    			(observable, oldValue, newValue) -> showMachineList(newValue));
+    	chooseMachine.getSelectionModel().selectedItemProperty().addListener(
+    			(observable, oldValue, newValue) -> letOpenFile());
     	
     	
     }
     
     private void showMachineList() {
-    	//Machine machine = new Machine(new SimpleStringProperty("Hello"), new SimpleStringProperty("0"));
-    	//chooseMachine.getItems().add(machine);
-    	//chooseMachine.setValue(machine);
-    	//chooseMachine.getItems().add("Test");
     	chooseMachine.getItems().addAll(Machine.getMachineFromARP());
     }
     
-//    private void showMachineList(Machine machine) {
-//    	if (machine != null) {
-//    		// ?
-//    	}
-//    	else {
-//			
-//		}
-//    	
-//    }
+    private void letOpenFile() {
+    	openFiles.setDisable(false);
+    }
     
     private void showFileTransfer(File file) {
     	if(file != null)

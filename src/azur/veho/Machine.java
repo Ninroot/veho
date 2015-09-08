@@ -110,7 +110,7 @@ public class Machine implements Serializable{
 	}
 	
 	public String toString() {
-		return name.toString()+" ("+ipV3.toString()+")";
+		return name.getValue()+" ("+ipV3.getValue()+")";
 	}
 	
 	public SimpleStringProperty getName() {
