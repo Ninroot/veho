@@ -17,14 +17,14 @@ public class Machine implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = -1603390231937672788L;
-	private SimpleStringProperty name;
-	private SimpleStringProperty ipV3;
-	private SimpleStringProperty password;
+	private String name;
+	private String ipV3;
+	private String password;
 	
 	public Machine(String name, String ipV3) {
-		this.name = new SimpleStringProperty(name);
-		this.ipV3 = new SimpleStringProperty(ipV3);
-		this.password = new SimpleStringProperty("azur");
+		this.name = name;
+		this.ipV3 = ipV3;
+		this.password = "azur";
 	}
 	
 	/**
@@ -110,30 +110,30 @@ public class Machine implements Serializable{
 	}
 	
 	public String toString() {
-		return name.getValue()+" ("+ipV3.getValue()+")";
+		return name+" ("+ipV3+")";
 	}
 	
-	public SimpleStringProperty getName() {
+	public String getName() {
 		return name;
 	}
 
-	public void setName(SimpleStringProperty name) {
+	public void setName(String name) {
 		this.name = name;
 	}
 
-	public SimpleStringProperty getIpV3() {
+	public String getIpV3() {
 		return ipV3;
 	}
 
-	public void setIpV3(SimpleStringProperty ipV3) {
+	public void setIpV3(String ipV3) {
 		this.ipV3 = ipV3;
 	}
 
-	public SimpleStringProperty getPassword() {
+	public String getPassword() {
 		return password;
 	}
 
-	public void setPassword(SimpleStringProperty password) {
+	public void setPassword(String password) {
 		this.password = password;
 	}
 }

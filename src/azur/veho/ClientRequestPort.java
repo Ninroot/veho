@@ -24,7 +24,7 @@ public class ClientRequestPort implements Runnable{
 		ObjectInputStream in = null;
 
 		try {
-			socketRequestPort = new Socket(requestPort.getMachineDst().getIpV3().toString(), socketPort);
+			socketRequestPort = new Socket(requestPort.getMachineDst().getIpV3(), socketPort);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -79,7 +79,7 @@ public class ClientRequestPort implements Runnable{
 		do {
 			try {
 				requestPort = RequestPort.listenForRequestPort(in, out);
-				socketFile = new Socket(requestPort.getMachineDst().getIpV3().toString(), requestPort.getPort());
+				socketFile = new Socket(requestPort.getMachineDst().getIpV3(), requestPort.getPort());
 				requestPort.setAccepted(true);
 
 			} catch (IOException e) {

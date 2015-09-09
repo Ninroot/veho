@@ -5,23 +5,23 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="75.0" maxWidth="800.0" minHeight="75.0" minWidth="200.0" prefHeight="75.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="azur.veho.view.TransferOverviewController">
+<AnchorPane maxHeight="75.0" maxWidth="1.7976931348623157E308" minHeight="75.0" minWidth="200.0" prefHeight="75.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="azur.veho.view.TransferOverviewController">
    <children>
-      <VBox prefHeight="89.0" prefWidth="601.0" spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+      <VBox maxWidth="1.7976931348623157E308" prefHeight="89.0" prefWidth="601.0" spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
          <children>
-            <HBox prefHeight="26.0" prefWidth="700.0" spacing="10.0">
+            <HBox maxWidth="1.7976931348623157E308" prefHeight="26.0" prefWidth="700.0" spacing="10.0">
                <children>
-                  <ChoiceBox fx:id="chooseMachine" prefHeight="26.0" prefWidth="800.0" />
+                  <ChoiceBox fx:id="chooseMachine" maxWidth="1.7976931348623157E308" prefHeight="26.0" prefWidth="800.0" />
                   <HBox minHeight="-Infinity" minWidth="-Infinity" spacing="10.0" HBox.hgrow="NEVER">
                      <children>
                         <Button fx:id="refreshMachine" layoutX="171.0" layoutY="35.0" mnemonicParsing="false" text="Refresh" />
-                        <Button fx:id="openFiles" layoutX="257.0" layoutY="35.0" mnemonicParsing="false" text="Open..." />
-                        <Button fx:id="sendFiles" layoutX="331.0" layoutY="35.0" mnemonicParsing="false" text="Send" />
+                        <Button fx:id="openFiles" disable="true" layoutX="257.0" layoutY="35.0" mnemonicParsing="false" onAction="#handleChooseFiles" text="Open..." />
+                        <Button fx:id="sendFiles" disable="true" layoutX="331.0" layoutY="35.0" mnemonicParsing="false" onAction="#handleSendFiles" text="Send" />
                      </children>
                   </HBox>
                </children>
             </HBox>
-            <StackPane layoutY="40.0">
+            <StackPane layoutY="40.0" maxWidth="1.7976931348623157E308">
                <children>
                   <ProgressBar layoutY="40.0" maxWidth="1.7976931348623157E308" prefHeight="20.0" prefWidth="701.0" progress="0.0" />
                   <Label fx:id="transferLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="205.0" layoutY="42.0" maxWidth="1.7976931348623157E308" opacity="0.5" prefHeight="16.0" prefWidth="150.0" text="file" />

@@ -16,7 +16,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
-public class Main extends Application {
+public class MainApp extends Application {
 	
 	private Stage primaryStage;
 	private BorderPane rootLayout;
@@ -32,14 +32,14 @@ public class Main extends Application {
 		showTransferOverview();
 	}
 	
-	public Main() {
+	public MainApp() {
 		//machineList.addAll(Machine.getMachineFromARP());
 	}
 	
 	public void initRootLayout() {
 		try {
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(Main.class.getResource("view/RootLayout.fxml"));
+			loader.setLocation(MainApp.class.getResource("view/RootLayout.fxml"));
 			rootLayout = (BorderPane) loader.load();
 			
 			Scene scene = new Scene(rootLayout);
@@ -47,7 +47,7 @@ public class Main extends Application {
 			primaryStage.show();
 			
 			primaryStage.setMaxHeight(primaryStage.getHeight());
-			primaryStage.setMaxWidth(2*primaryStage.getWidth());
+			primaryStage.setMaxWidth(3*primaryStage.getWidth());
 			primaryStage.setMinHeight(primaryStage.getHeight());
 			primaryStage.setMinWidth(0.5*primaryStage.getWidth());
 		} catch (IOException e) {
@@ -58,7 +58,7 @@ public class Main extends Application {
 	public void showTransferOverview() {
 		try {
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(Main.class.getResource("view/TransferOverview.fxml"));
+            loader.setLocation(MainApp.class.getResource("view/TransferOverview.fxml"));
             AnchorPane personOverview = (AnchorPane) loader.load();
 
             rootLayout.setCenter(personOverview);
@@ -72,37 +72,38 @@ public class Main extends Application {
 	}
 
 	public static void main(String[] args) {
-		launch(args);
+		test();
+		//launch(args);
 	}
 	
-//	public static void test() {
-////		try {
-////			ServerSocket socketTest = new ServerSocket(65535);
-////		} catch (IOException e) {
-////			e.printStackTrace();
-////		}
-//		
-//		Machine m = Machine.getMyMachine();
-//		System.out.println(m.getIpV3());
-//		System.out.println(m.getName());
-//		
-//		//Files tests
-//		ArrayList<File> fileList = new ArrayList<File>();
-//		fileList.add(new  File("/Users/debec/Desktop/src/txt.txt"));
-//		fileList.add(new  File("/Users/debec/Desktop/src/big.html"));
-//		fileList.add(new  File("/Users/debec/Desktop/src/fire.png"));
-//		//fileList.add(new  File("/Users/debec/Desktop/src/txt2.txt"));
-//		//fileList.add(new  File("/Users/debec/Desktop/src/img.png"));
-//		//fileList.add(new  File("/Users/debec/Desktop/src/icon.gif"));
-//		//fileList.add(new  File("/Users/debec/Desktop/src/file.png"));
-//		//fileList.add(new  File("/Users/debec/Desktop/src/nouille.png"));
-//		
-//		Thread tServer = new Thread(new ServerRequestPort());
-//		tServer.start();
-//		for (int i=0; i<5; i++)
-//			m.send(m, fileList);
-//		
-//	}
+	public static void test() {
+//		try {
+//			ServerSocket socketTest = new ServerSocket(65535);
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+		
+		Machine m = Machine.getMyMachine();
+		System.out.println(m.getIpV3());
+		System.out.println(m.getName());
+		
+		//Files tests
+		ArrayList<File> fileList = new ArrayList<File>();
+		fileList.add(new  File("/Users/debec/Desktop/src/txt.txt"));
+		fileList.add(new  File("/Users/debec/Desktop/src/big.html"));
+		fileList.add(new  File("/Users/debec/Desktop/src/fire.png"));
+		//fileList.add(new  File("/Users/debec/Desktop/src/txt2.txt"));
+		//fileList.add(new  File("/Users/debec/Desktop/src/img.png"));
+		//fileList.add(new  File("/Users/debec/Desktop/src/icon.gif"));
+		//fileList.add(new  File("/Users/debec/Desktop/src/file.png"));
+		//fileList.add(new  File("/Users/debec/Desktop/src/nouille.png"));
+		
+		Thread tServer = new Thread(new ServerRequestPort());
+		tServer.start();
+		for (int i=0; i<5; i++)
+			m.send(m, fileList);
+		
+	}
 
 	public Stage getPrimaryStage() {
 		return primaryStage;
