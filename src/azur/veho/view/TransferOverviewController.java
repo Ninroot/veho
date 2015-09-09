@@ -39,6 +39,7 @@ public class TransferOverviewController implements Initializable {
 	public TransferOverviewController() {
 		myMachine = Machine.getMyLocalMachine();
 		Thread tServer = new Thread(new ServerRequestPort());
+		tServer.setDaemon(true);	//close the pss after closing the window...
 		tServer.start();
 	}
 

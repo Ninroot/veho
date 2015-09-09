@@ -9,6 +9,12 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Optional;
+
+import javafx.application.Platform;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 
 /**
  * 
@@ -49,8 +55,24 @@ public class Server implements Runnable {
 		}
 		
 		RequestFile requestFile = RequestFile.listenForRequest(in, out);
-		//Ask user
-		requestFile.setAccepted(true);
+		
+		//Ask user. Redo it in a better way 
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {				
+				Alert alert = new Alert(AlertType.CONFIRMATION);
+				alert.setTitle("Request Confirmation");
+				alert.setHeaderText("Would you like those file(s) ?");
+				alert.setContentText(requestFile.getFileList().toString());
+
+				Optional<ButtonType> result = alert.showAndWait();
+				if (result.get() == ButtonType.OK){
+					requestFile.setAccepted(true);
+				} else {
+
+				}
+			}
+		});
 		
 		try {
 			out.writeObject(requestFile);

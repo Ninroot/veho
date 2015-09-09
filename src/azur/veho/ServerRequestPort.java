@@ -9,6 +9,7 @@ import java.net.Socket;
 public class ServerRequestPort implements Runnable{
 	private int socketPort = 13267;
 	private RequestPort requestPort;
+	private boolean go;
 
 	public ServerRequestPort() {
 		this.requestPort = null;
@@ -20,7 +21,7 @@ public class ServerRequestPort implements Runnable{
 		Socket socketRequestPort = null;
 		ObjectOutputStream out = null;
 		ObjectInputStream in = null;
-		boolean go = true;
+		go = true;
 
 		try {
 			serverSocketRequestPort = new ServerSocket(socketPort);
@@ -70,8 +71,11 @@ public class ServerRequestPort implements Runnable{
 			System.out.println("SERVER SOCKET FILE : "+serverSocketFile.getLocalPort());
 			Thread tServer = new Thread(new Server(serverSocketFile));
 			tServer.start();
+			
+			go=false;
 		}
 
+		System.out.println("Stop...");
 	}
 
 	public ServerSocket getServerSocketFile(ObjectInputStream in, ObjectOutputStream out) {
@@ -100,6 +104,10 @@ public class ServerRequestPort implements Runnable{
 		} while(!requestPort.getAccepted());
 
 		return serverSocketFile;
+	}
+	
+	public void stop() {
+		go = false;
 	}
 
 }

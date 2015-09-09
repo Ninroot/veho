@@ -20,7 +20,6 @@ public class MainApp extends Application {
 	
 	private Stage primaryStage;
 	private BorderPane rootLayout;
-	private ObservableList<Machine> machineList = FXCollections.observableArrayList();
 	
 	@Override
 	public void start(Stage primaryStage) {
@@ -50,6 +49,7 @@ public class MainApp extends Application {
 			primaryStage.setMaxWidth(3*primaryStage.getWidth());
 			primaryStage.setMinHeight(primaryStage.getHeight());
 			primaryStage.setMinWidth(0.5*primaryStage.getWidth());
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -107,9 +107,5 @@ public class MainApp extends Application {
 
 	public Stage getPrimaryStage() {
 		return primaryStage;
-	}
-
-	public ObservableList<Machine> getMachineList() {
-		return machineList;
 	}
 }
