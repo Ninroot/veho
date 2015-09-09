@@ -72,8 +72,8 @@ public class MainApp extends Application {
 	}
 
 	public static void main(String[] args) {
-		test();
-		//launch(args);
+		//test();
+		launch(args);
 	}
 	
 	public static void test() {

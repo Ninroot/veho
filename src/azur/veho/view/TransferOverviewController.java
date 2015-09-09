@@ -72,6 +72,8 @@ public class TransferOverviewController implements Initializable {
 
 	@FXML
 	private void handleChooseFiles() {
+		fileList.clear();	//against resending
+		
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Open Resource File");
 		List<File> fL = fileChooser.showOpenMultipleDialog(null);
