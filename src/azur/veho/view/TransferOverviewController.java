@@ -44,9 +44,11 @@ public class TransferOverviewController implements Initializable {
 	}
 
 	@FXML
-	public void initialize(URL arg0, ResourceBundle arg1) {
+	public void initialize() {
 		showFileTransfer(null);
 		showMachineList();
+		
+		//Machine selection 
 		chooseMachine.getSelectionModel().selectedItemProperty().addListener(
 				new ChangeListener<Machine>() {
 					@Override
@@ -58,18 +60,10 @@ public class TransferOverviewController implements Initializable {
 				});
 	}
 
-//	@FXML
-//	private void handleChooseMachine() {
-//		System.out.println("Noodle");
-//		machineDst = chooseMachine.getValue();
-//		if(machineDst != null) {
-//			System.out.println(machineDst.getIpV3());
-//			openFiles.setDisable(false);
-//		}
-//		else {
-//			System.out.println("null ?");
-//		}
-//	}
+	@FXML
+	private void handleRefreshMachine() {
+		showMachineList();
+	}
 
 	@FXML
 	private void handleChooseFiles() {
@@ -92,6 +86,7 @@ public class TransferOverviewController implements Initializable {
 	}
 
 	private void showMachineList() {
+		chooseMachine.getItems().clear();
 		chooseMachine.getItems().addAll(Machine.getMachineFromARP());
 	}
 
@@ -109,5 +104,11 @@ public class TransferOverviewController implements Initializable {
 		this.main = main;
 
 		//chooseMachine.setItems(main.getMachineList());
+	}
+
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+		// TODO Auto-generated method stub
+		
 	}
 }
