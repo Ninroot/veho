@@ -38,7 +38,6 @@ public class Machine implements Serializable{
 		
 		Thread tclientRequestPort = new Thread(clientRequestPort);
 		tclientRequestPort.start();
-//		System.out.println("\t machine.send");
 	}
 	
 	/**
@@ -49,7 +48,6 @@ public class Machine implements Serializable{
 		String raw = Commande.arp();
 		String[] lines = raw.split("\n");
 
-		//machines.add(new Machine("MyLocal", "192.168.1.97"));
 		for(String line : lines) {
 			Machine m = new Machine(getNameRegex(line), getIpRegex(line));
 			machines.add(m);
@@ -63,7 +61,7 @@ public class Machine implements Serializable{
 	 * @return
 	 */
 	public static Machine getMyMachine() {
-		return new Machine("MyLocal", "192.168.1.97");
+		return new Machine("local", "192.168.1.97");
 	}
 	
 	public static Machine getMyLocalMachine() {

@@ -40,11 +40,9 @@ public class ClientRequestPort implements Runnable{
 		try {
 			in = new ObjectInputStream(socketRequestPort.getInputStream());
 		} catch (IOException e) {
-			System.out.println("WTF ????????????");
 			e.printStackTrace();
 		}
 
-		System.out.println("Finding a socket.......................................................");
 		Socket socketFile = getSocketFile(in, out);
 
 		try {

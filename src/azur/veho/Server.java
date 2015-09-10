@@ -58,15 +58,14 @@ public class Server implements Runnable {
 		RequestFile requestFile = RequestFile.listenForRequest(in, out);
 		
 		//Ask user. Redo it in a better way
-		//requestFile.setAccepted(true);
-		Platform.runLater(new Runnable() {
-			@Override
+//		requestFile.setAccepted(true);
+		ThreadUtils.runAndWait(new Runnable(){
 			public void run() {				
 				Alert alert = new Alert(AlertType.CONFIRMATION);
 				alert.setTitle("Request Confirmation");
 				alert.setHeaderText("Would you like those file(s) ?");
 				alert.setContentText(requestFile.getFileList().toString());
-
+				
 				Optional<ButtonType> result = alert.showAndWait();
 				if (result.get() == ButtonType.OK){
 					requestFile.setAccepted(true);
@@ -74,9 +73,12 @@ public class Server implements Runnable {
 					requestFile.setAccepted(false);
 				}
 			}
-		});
+			
+		});		
 		
-		System.out.println("SERVER : Sending acceptation...");
+		//wait for response
+		
+		System.out.println("SERVER : Sending acceptation... : "+requestFile.getAccepted());
 		try {
 			out.writeObject(requestFile);
 			out.flush();
@@ -133,9 +135,8 @@ public class Server implements Runnable {
 					curPos += readThisTime;
 //					System.out.println("[SERVER] readThisTime:"+readThisTime+" curPos:"+curPos+ " file.length-curPos:"+(file.length() - curPos));
 				}
-//				System.out.println("[SERVER] |<-- DOWNLOAD STOP :" + file.getName() + " size:" + file.length());
+				System.out.println("[SERVER] |<-- DOWNLOAD STOP :" + file.getName() + " size:" + file.length());
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
