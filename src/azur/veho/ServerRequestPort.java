@@ -71,8 +71,6 @@ public class ServerRequestPort implements Runnable{
 			System.out.println("SERVER SOCKET FILE : "+serverSocketFile.getLocalPort());
 			Thread tServer = new Thread(new Server(serverSocketFile));
 			tServer.start();
-			
-			go=false;
 		}
 
 		System.out.println("Stop...");
@@ -92,7 +90,6 @@ public class ServerRequestPort implements Runnable{
 
 					out.writeObject(requestPort);
 					out.flush();
-
 					requestPort = RequestPort.listenForRequestPort(in, out);
 					break;
 				} catch (IOException e) {

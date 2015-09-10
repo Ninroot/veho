@@ -38,6 +38,7 @@ public class Machine implements Serializable{
 		
 		Thread tclientRequestPort = new Thread(clientRequestPort);
 		tclientRequestPort.start();
+//		System.out.println("\t machine.send");
 	}
 	
 	/**

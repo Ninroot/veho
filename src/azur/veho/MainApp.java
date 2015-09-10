@@ -2,6 +2,7 @@ package azur.veho;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.ServerSocket;
 import java.rmi.server.LoaderHandler;
 import java.util.ArrayList;
 
@@ -77,11 +78,11 @@ public class MainApp extends Application {
 	}
 	
 	public static void test() {
-//		try {
-//			ServerSocket socketTest = new ServerSocket(65535);
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
+		try {
+			ServerSocket socketTest = new ServerSocket(65535);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
 		Machine m = Machine.getMyMachine();
 		System.out.println(m.getIpV3());
@@ -89,20 +90,28 @@ public class MainApp extends Application {
 		
 		//Files tests
 		ArrayList<File> fileList = new ArrayList<File>();
-		fileList.add(new  File("/Users/debec/Desktop/src/txt.txt"));
-		fileList.add(new  File("/Users/debec/Desktop/src/big.html"));
-		fileList.add(new  File("/Users/debec/Desktop/src/fire.png"));
-		//fileList.add(new  File("/Users/debec/Desktop/src/txt2.txt"));
-		//fileList.add(new  File("/Users/debec/Desktop/src/img.png"));
-		//fileList.add(new  File("/Users/debec/Desktop/src/icon.gif"));
-		//fileList.add(new  File("/Users/debec/Desktop/src/file.png"));
-		//fileList.add(new  File("/Users/debec/Desktop/src/nouille.png"));
+		fileList.add(new File("/Users/debec/Desktop/src/txt.txt"));
+		fileList.add(new File("/Users/debec/Desktop/src/big.html"));
+		fileList.add(new File("/Users/debec/Desktop/src/fire.png"));
+		//fileList.add(new File("/Users/debec/Desktop/src/txt2.txt"));
+		//fileList.add(new File("/Users/debec/Desktop/src/img.png"));
+		//fileList.add(new File("/Users/debec/Desktop/src/icon.gif"));
+		//fileList.add(new File("/Users/debec/Desktop/src/file.png"));
+		//fileList.add(new File("/Users/debec/Desktop/src/nouille.png"));
 		
 		Thread tServer = new Thread(new ServerRequestPort());
 		tServer.start();
-		for (int i=0; i<5; i++)
+		for (int i=0; i<1; i++)
+		{
 			m.send(m, fileList);
-		
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+				
 	}
 
 	public Stage getPrimaryStage() {

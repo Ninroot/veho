@@ -40,14 +40,15 @@ public class Client implements Runnable {
 			e.printStackTrace();
 		}
 		
+		System.out.println("CLIENT : Sending a new request...");
 		try {
 			out.writeObject(requestFile);
 			out.flush();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
+		System.out.println("CLIENT : Waiting for acceptation...");
 		requestFile = RequestFile.listenForRequest(in, out);
 		if(requestFile.getAccepted()) {
 			sendFile(requestFile.getFileList(), in, out);
@@ -87,7 +88,7 @@ public class Client implements Runnable {
 				fis = new FileInputStream(file);
 				bis = new BufferedInputStream(fis);
 				
-				//System.out.println("[CLIENT] ---> UPLOAD START :"+file.getName()+" size:"+file.length());
+//				System.out.println("[CLIENT] ---> UPLOAD START :"+file.getName()+" size:"+file.length());
 
 				int curPos = 0;
 				while (curPos < file.length()) {
@@ -96,11 +97,11 @@ public class Client implements Runnable {
 					out.write(mybytearray, 0, readThisTime);
 					out.flush();
 					
-					//System.out.println("[CLIENT] readThisTime:"+readThisTime+" curPos:"+curPos+ " file.length-curPos:"+(file.length() - curPos));
+//					System.out.println("[CLIENT] readThisTime:"+readThisTime+" curPos:"+curPos+ " file.length-curPos:"+(file.length() - curPos));
 
 					curPos += readThisTime;
 				}
-				//System.out.println("[CLIENT] -->| UPLOAD STOP :"+file.getName()+" size:"+file.length());
+//				System.out.println("[CLIENT] -->| UPLOAD STOP :"+file.getName()+" size:"+file.length());
 
 			} catch (IOException e) {
 				e.printStackTrace();

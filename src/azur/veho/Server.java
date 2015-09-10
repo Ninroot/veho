@@ -54,9 +54,11 @@ public class Server implements Runnable {
 			e.printStackTrace();
 		}
 		
+		System.out.println("SERVER : Waiting for request...");
 		RequestFile requestFile = RequestFile.listenForRequest(in, out);
 		
-		//Ask user. Redo it in a better way 
+		//Ask user. Redo it in a better way
+		//requestFile.setAccepted(true);
 		Platform.runLater(new Runnable() {
 			@Override
 			public void run() {				
@@ -69,11 +71,12 @@ public class Server implements Runnable {
 				if (result.get() == ButtonType.OK){
 					requestFile.setAccepted(true);
 				} else {
-
+					requestFile.setAccepted(false);
 				}
 			}
 		});
 		
+		System.out.println("SERVER : Sending acceptation...");
 		try {
 			out.writeObject(requestFile);
 			out.flush();
@@ -116,7 +119,7 @@ public class Server implements Runnable {
 		for (File file : fileList) {
 			try {
 				byte [] mybytearray = new byte [buff];
-				//System.out.println("[SERVER] <--- DOWNLOAD START :" + file.getName() + " size:" + file.length());
+//				System.out.println("[SERVER] <--- DOWNLOAD START :" + file.getName() + " size:" + file.length());
 				fos = new FileOutputStream(dstDirectory + file.getName());
 				bos = new BufferedOutputStream(fos);
 
@@ -128,9 +131,9 @@ public class Server implements Runnable {
 					bos.flush();
 
 					curPos += readThisTime;
-					//System.out.println("[SERVER] readThisTime:"+readThisTime+" curPos:"+curPos+ " file.length-curPos:"+(file.length() - curPos));
+//					System.out.println("[SERVER] readThisTime:"+readThisTime+" curPos:"+curPos+ " file.length-curPos:"+(file.length() - curPos));
 				}
-				System.out.println("[SERVER] |<-- DOWNLOAD STOP :" + file.getName() + " size:" + file.length());
+//				System.out.println("[SERVER] |<-- DOWNLOAD STOP :" + file.getName() + " size:" + file.length());
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

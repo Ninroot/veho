@@ -15,6 +15,7 @@ public class ClientRequestPort implements Runnable{
 	public ClientRequestPort(RequestPort requestPort, RequestFile requestFile) {
 		this.requestPort = requestPort;
 		this.requestFile = requestFile;
+		System.out.println("CLIENT REQUEST PORT");
 	}
 
 	@Override
@@ -39,9 +40,11 @@ public class ClientRequestPort implements Runnable{
 		try {
 			in = new ObjectInputStream(socketRequestPort.getInputStream());
 		} catch (IOException e) {
+			System.out.println("WTF ????????????");
 			e.printStackTrace();
 		}
 
+		System.out.println("Finding a socket.......................................................");
 		Socket socketFile = getSocketFile(in, out);
 
 		try {
@@ -68,6 +71,7 @@ public class ClientRequestPort implements Runnable{
 	public Socket getSocketFile(ObjectInputStream in, ObjectOutputStream out) {
 		try {
 			//Starting negotiation
+			System.out.println("Starting negotiation");
 			out.writeObject(requestPort);
 			out.flush();
 		} catch (IOException e) {

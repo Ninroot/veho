@@ -26,12 +26,12 @@ public class RequestPort implements Serializable{
 
 		while(go) {
 			try {
-				//System.out.println("Waiting for request port...");
+				System.out.println("Waiting for request port...");
 				Object objetRecu = in.readObject();
 				RequestPort requestPort = (RequestPort) objetRecu;
 				
 				if(requestPort != null) {
-					//System.out.println("Request port received: " + requestPort);
+					System.out.println("Request port received: " + requestPort);
 					return requestPort;					
 				}
 
