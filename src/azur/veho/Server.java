@@ -27,7 +27,7 @@ public class Server implements Runnable {
 
 	public Server(ServerSocket serverSocketFile) {
 		this.serverSocketFile = serverSocketFile;
-		this.dstDirectory = "/Users/debec/Desktop/dst/";
+		this.dstDirectory = System.getProperty("user.home")+"/";
 	}
 
 	public void run() {		
@@ -140,5 +140,9 @@ public class Server implements Runnable {
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	private void initializeDownloadDirectory() {
+		
 	}
 }

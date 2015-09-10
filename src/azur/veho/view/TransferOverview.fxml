@@ -14,14 +14,14 @@
                   <ChoiceBox fx:id="chooseMachine" maxWidth="1.7976931348623157E308" prefHeight="26.0" prefWidth="800.0" />
                   <HBox minHeight="-Infinity" minWidth="-Infinity" spacing="10.0" HBox.hgrow="NEVER">
                      <children>
-                        <Button fx:id="refreshMachine" layoutX="171.0" layoutY="35.0" mnemonicParsing="false" text="Refresh" />
+                        <Button fx:id="refreshMachine" disable="true" layoutX="171.0" layoutY="35.0" mnemonicParsing="false" text="Refresh" />
                         <Button fx:id="openFiles" disable="true" layoutX="257.0" layoutY="35.0" mnemonicParsing="false" onAction="#handleChooseFiles" text="Open..." />
                         <Button fx:id="sendFiles" disable="true" layoutX="331.0" layoutY="35.0" mnemonicParsing="false" onAction="#handleSendFiles" text="Send" />
                      </children>
                   </HBox>
                </children>
             </HBox>
-            <StackPane layoutY="40.0" maxWidth="1.7976931348623157E308">
+            <StackPane disable="true" layoutY="40.0" maxWidth="1.7976931348623157E308" visible="false">
                <children>
                   <ProgressBar layoutY="40.0" maxWidth="1.7976931348623157E308" prefHeight="20.0" prefWidth="701.0" progress="0.0" />
                   <Label fx:id="transferLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="205.0" layoutY="42.0" maxWidth="1.7976931348623157E308" opacity="0.5" prefHeight="16.0" prefWidth="150.0" text="file" />
