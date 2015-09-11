@@ -43,8 +43,8 @@ public class TransferOverviewController implements Initializable {
 		tServer.start();
 	}
 
-	@FXML
-	public void initialize() {
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
 		showFileTransfer(null);
 		showMachineList();
 		
@@ -104,11 +104,5 @@ public class TransferOverviewController implements Initializable {
 		this.main = main;
 
 		//chooseMachine.setItems(main.getMachineList());
-	}
-
-	@Override
-	public void initialize(URL location, ResourceBundle resources) {
-		// TODO Auto-generated method stub
-		
 	}
 }
