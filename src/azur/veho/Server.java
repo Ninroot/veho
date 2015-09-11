@@ -27,7 +27,7 @@ public class Server implements Runnable {
 
 	public Server(ServerSocket serverSocketFile) {
 		this.serverSocketFile = serverSocketFile;
-		this.dstDirectory = System.getProperty("user.home")+"/";
+		this.dstDirectory = System.getProperty("user.home")+"/Desktop/";
 	}
 
 	public void run() {		

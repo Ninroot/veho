@@ -65,7 +65,7 @@ public class MainApp extends Application {
             rootLayout.setCenter(personOverview);
             
             TransferOverviewController controller = loader.getController();
-            controller.setMain(this);
+            controller.setMainApp(this);
             
         } catch (IOException e) {
             e.printStackTrace();

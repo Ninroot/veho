@@ -100,7 +100,7 @@ public class TransferOverviewController implements Initializable {
 		}
 	}
 
-	public void setMain(MainApp main) {
+	public void setMainApp(MainApp main) {
 		this.main = main;
 
 		//chooseMachine.setItems(main.getMachineList());

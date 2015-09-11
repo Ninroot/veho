@@ -11,6 +11,7 @@ public class ClientRequestPort implements Runnable{
 	private int socketPort = 13267;
 	private RequestPort requestPort;
 	private RequestFile requestFile;
+	private Client client;
 
 	public ClientRequestPort(RequestPort requestPort, RequestFile requestFile) {
 		this.requestPort = requestPort;
@@ -62,7 +63,8 @@ public class ClientRequestPort implements Runnable{
 		}
 
 		System.out.println("SOCKET FILE : "+socketFile.getPort());
-		Thread tClient = new Thread(new Client(requestFile, socketFile));
+		client = new Client(requestFile, socketFile);
+		Thread tClient = new Thread();
 		tClient.start();
 	}
 
@@ -116,5 +118,8 @@ public class ClientRequestPort implements Runnable{
 	public void setRequestPort(RequestPort requestPort) {
 		this.requestPort = requestPort;
 	}
-
+	
+	public Client getClient() {
+		return client;
+	}
 }
